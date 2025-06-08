@@ -41,6 +41,7 @@ class ScoreWindow extends HTMLElement {
                 }
             </style>
             <div class="score-window">
+                <div class="status"><span id="status"></span></div>
                 <div class="score">Score: <span id="score">0</span></div>
                 <button id="play-again">Play Again</button>
             </div>
@@ -49,6 +50,7 @@ class ScoreWindow extends HTMLElement {
 
     connectedCallback() {
         this.scoreElement = this.shadowRoot.querySelector('#score');
+        this.statusElement = this.shadowRoot.querySelector('#status');
         this.updateScore(0);
 
         const playAgainBtn = this.shadowRoot.querySelector('#play-again');
@@ -57,8 +59,9 @@ class ScoreWindow extends HTMLElement {
         });
     }
 
-    updateScore(value) {
+    updateScore(value, status) {
         this.scoreElement.textContent = value;
+        this.statusElement.textContent = status || '';
     }
 }
 

@@ -77,7 +77,9 @@ function handleEndTurn() {
     if (round >= 4) {
         const scorePopup = document.createElement("score-window");
         document.body.appendChild(scorePopup);
-        scorePopup.updateScore(score);
+
+        var status = score <= 100 ? "You win!" : "You lose!";
+        scorePopup.updateScore(score, status);
         return;
     } else {
         document.getElementById("round-label").textContent = `${round}`;
