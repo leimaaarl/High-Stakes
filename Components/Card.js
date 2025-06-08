@@ -18,9 +18,9 @@ class PokerCard extends HTMLElement {
           flex-direction: column;
           justify-content: space-between;
           padding: 8px;
+          position: relative;
           box-sizing: border-box;
         }
-
         .card:hover {
             transform: scale(1.05);
         }
@@ -41,7 +41,14 @@ class PokerCard extends HTMLElement {
           right: 8px;
           transform: rotate(180deg);
         }
-
+        .value{
+        position: absolute;
+        bottom: 100%;
+        left: 0;
+        display:none;
+        font-size: 16px;
+        color: white;
+        }
         .center {
           font-size: 48px;
           display: flex;
@@ -50,6 +57,7 @@ class PokerCard extends HTMLElement {
           height: 100%;
           color: currentColor;
         }
+        
       </style>
       <div class="card">
         <div class="corner top-left">
@@ -61,6 +69,7 @@ class PokerCard extends HTMLElement {
           <div class="number"></div>
           <div class="suit"></div>
         </div>
+        <div class="value"></div>
       </div>
     `;
     }
@@ -69,9 +78,11 @@ class PokerCard extends HTMLElement {
         const number = this.getAttribute('number') || '';
         const suit = this.getAttribute('suit') || '';
         const color = this.getAttribute('color') || 'black';
+        const value = this.getAttribute('value') || '';
  
         this.shadowRoot.querySelectorAll('.number').forEach(el => el.textContent = number);
         this.shadowRoot.querySelectorAll('.suit').forEach(el => el.textContent = suit);
+        this.shadowRoot.querySelector('.value').textContent = value;
         this.shadowRoot.querySelector('.card').style.color = color;
     }
 }

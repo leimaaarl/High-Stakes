@@ -7,7 +7,14 @@ var cardCount = 1;
 var score = 0;
 var round = 1;
 
+function getCardValue(number) {
+    if (number === "A") return 13;
+    if (["J", "Q", "K"].includes(number)) return 10;
+    return parseInt(number);
+}
+
 function createCard() {
+    document.getElementById("end-turn-btn").style.display = "none";
     while (userCards.children.length <= 6) {
         const card = document.createElement("poker-card");
         const number = numbers[Math.floor(Math.random() * numbers.length)];
@@ -15,11 +22,12 @@ function createCard() {
         const color = colors[Math.floor(Math.random() * colors.length)];
 
         if (!userCards.querySelector(`[number="${number}"][suit="${suit}"][color="${color}"]`)) {
+            const value = getCardValue(number);
             card.setAttribute("status", "user");
             card.setAttribute("number", number);
             card.setAttribute("suit", suit);
             card.setAttribute("color", color);
-
+            card.setAttribute("value", `+${value}`);
             addCardClickListener(card);
             userCards.appendChild(card);
         }
@@ -43,7 +51,6 @@ function addCardClickListener(card) {
                 cardCount++;
             }
         } else if (currentStatus === "table") {
-            document.getElementById("end-turn-btn").style.display = "none";
             card.setAttribute("status", "user");
             userCards.appendChild(card);
             if (inputedCards.contains(card)) inputedCards.removeChild(card);
@@ -53,19 +60,11 @@ function addCardClickListener(card) {
 }
 
 function calculateCardValue() {
-    var value = 0;
+    let value = 0;
     const cards = inputedCards.querySelectorAll("poker-card");
     cards.forEach(card => {
-        const number = card.getAttribute("number");
-        if (number === "A") {
-            value += 13;
-        } else if (["J", "Q", "K"].includes(number)) {
-            value += 10;
-        } else {
-            value += parseInt(number);
-        }
+        value += parseInt(card.getAttribute("value"));
     });
-
     return value;
 }
 
@@ -73,20 +72,26 @@ function handleEndTurn() {
     round++;
     score += calculateCardValue();
     document.getElementById("score-label").textContent = `${score}`;
-    inputedCards.innerHTML = "";
     if (round >= 4) {
         const scorePopup = document.createElement("score-window");
         document.body.appendChild(scorePopup);
-
-        var status = score >= 100 ? "You win!" : "You lose!";
+        const status = score >= 100 ? "You win!" : "You lose!";
         scorePopup.updateScore(score, status);
         return;
     } else {
-        document.getElementById("round-label").textContent = `${round}`;
-        cardCount = 1;
-        createCard();
+        inputedCards.querySelectorAll("poker-card").forEach(card => {
+            const valueEl = card.shadowRoot?.querySelector(".value");
+            if (valueEl) {
+                valueEl.style.display = "block";
+            }
+        });
+        setTimeout(() => {
+            inputedCards.innerHTML = "";
+            document.getElementById("round-label").textContent = `${round}`;
+            cardCount = 1;
+            createCard();
+        }, 2000);
     }
-
 }
 
 document.querySelectorAll("poker-card").forEach(addCardClickListener);
