@@ -78,7 +78,7 @@ function handleEndTurn() {
         const scorePopup = document.createElement("score-window");
         document.body.appendChild(scorePopup);
 
-        var status = score <= 100 ? "You win!" : "You lose!";
+        var status = score >= 100 ? "You win!" : "You lose!";
         scorePopup.updateScore(score, status);
         return;
     } else {
