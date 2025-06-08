@@ -164,9 +164,9 @@ function evaluateHand(cards) {
     } else if (straight) {
         results.push("straight");
     } else {
-        if (isThreeOfAKind) results.push("3 of a kind");
+        if (isThreeOfAKind) results.push("three of a kind");
         for (let i = 0; i < pairsCount; i++) {
-            results.push("2 of a kind");
+            results.push("two of a kind");
         }
     }
     return results;
